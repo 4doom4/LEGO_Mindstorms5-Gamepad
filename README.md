@@ -11,8 +11,8 @@ I uploaded really simple building instructions of the GamePad. These were made
 using Studio 2 from BrickLink. They are currently not ideal because of a
 rendering bug in the software but I am sure everyone can assemble it.
 
-Click [here](LEGO Mindstorms5 Gamepad-Instructions.pdf) for the instructions 
-and [here](LEGO Mindstorms5 Gamepad.png) for an image of the final GamePad.
+Click [here](LEGO%20Mindstorms5%20Gamepad-Instructions.pdf) for the instructions 
+and [here](LEGO%20Mindstorms5%20Gamepad.png) for an image of the final GamePad.
 
 ## List of Games
 
