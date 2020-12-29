@@ -11,8 +11,8 @@ I uploaded really simple building instructions of the GamePad. These were made
 using Studio 2 from BrickLink. They are currently not ideal because of a
 rendering bug in the software but I am sure everyone can assemble it.
 
-See the ``LEGO Mindstorms5 Gamepad-Instructions.pdf`` for the instructions
-and the final GamePad can be found here:``LEGO Mindstorms5 Gamepad.png``.
+Click [here](LEGO Mindstorms5 Gamepad-Instructions.pdf) for the instructions 
+and [here](LEGO Mindstorms5 Gamepad.png) for an image of the final GamePad.
 
 ## List of Games
 
@@ -25,4 +25,3 @@ hub.
 
 To play hold down the left key on the GamePad. Once released the final pick is
 made.
-
