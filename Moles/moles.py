@@ -29,11 +29,15 @@ class Moles():
         self._coord = self.spawn(occupiedCoords)
 
     def spawn(self, occupiedCoords):
-        while True:
-            moleCoord = [randrange(5), randrange(5)]
+        coords = [[i,j] for i in range(5) for j in range (5)]
+        while len(coords):
+            pick = randrange(len(coords))
+            moleCoord = coords[pick]
             if not any([moleCoord == coord for coord in occupiedCoords]):
-                break
-        return moleCoord
+                return moleCoord
+            else:
+                coords.pop(pick)
+        return None
 
     def intensity(self):
         return str(self._intensity)
@@ -66,8 +70,6 @@ class Player():
 
     def _occupied(self, pos, moleCoords):
         [row, col] = divmod(pos[0][0], 10)
-        print(moleCoords)
-        print([row, col])
         for moleCoord in moleCoords:
             if moleCoord == [row, col]:
                 return 1
@@ -128,7 +130,32 @@ class Level():
 
     def playerRight(self):
         self.player.moveRight(self.moleBlockCoord())
-    
+
+    def didPlayerBlock(self):
+        playerCoord = self.player.coord()
+        print("{}: {}".format(playerCoord, hub.display.pixel(playerCoord[1], playerCoord[0])))
+        # playerEnv = [
+        #     hub.display.pixel([
+        #         playerCoord[0],
+        #         playerCoord[1] + 1 if playerCoord[1] + 1 < 5 else 0
+        #     ]),
+        #     hub.display.pixel([
+        #         playerCoord[0] + 1 if playerCoord[0] + 1 < 5 else 0,
+        #         playerCoord[1] + 1 if playerCoord[1] + 1 < 5 else 0
+        #     ]),
+        #     hub.display.pixel([
+        #         playerCoord[0],
+        #         playerCoord[1] - 1 if playerCoord[1] - 1 > 0 else 4
+        #     ]),
+        #     hub.display.pixel([
+        #         playerCoord[0] - 1 if playerCoord[0] - 1 < 0 else 4,
+        #         playerCoord[1] - 1 if playerCoord[1] - 1 < 0 else 4
+        #     ])
+        # ]
+
+        # if all(intensity == 9 for intensity in playerEnv):
+        #     self._score = -1
+
     def moleBlockCoord(self):
         return [mole.coord() for mole in self.moles if mole.intensity() == '9']
 
@@ -138,10 +165,15 @@ class Level():
     def moleCreate(self):
         occupiedCoords = self.moleCoords()
         occupiedCoords.append(self.player.coord())
-        self.moles.append(Moles(occupiedCoords))
+        newMole = Moles(occupiedCoords)
+        if newMole == None:
+            self._score = -1
+        else:
+            self.moles.append(newMole)
 
     def molesDig(self):
         [mole.dig() for mole in self.moles]
+        self.didPlayerBlock()
 
     def draw(self):
             # draw player
@@ -167,18 +199,20 @@ class Level():
         self.moles = moles
         hub.display.show(hub.Image(convert_image(image)))
 
+    def didLoose(self):
+        if self._score == -1:
+            print("Game Over")
+            hub.led(255,0,0)
+            sleep(2)
+            return 1
+        else:
+            return 0
+
     def didWin(self):
         if self._score >= self.levelScore:
-            
-
-            for i in range (2):
-                if i%2:
-                    self._hub.status_light.on('white')
-                else:
-                    self._hub.status_light.on('green')
-                # self._hub.speaker.beep(60, 0.2)
-                # self._hub.speaker.beep(67, 0.2)
-                # self._hub.speaker.beep(60, 0.2)
+            print("Game Won")
+            hub.led(0,255,0)
+            sleep(2)
             return 1
         else:
             return 0
@@ -197,7 +231,7 @@ class Game():
 
     def digTime(self):
         return self._digTime[self.curLevel-1]
-    
+
     def levelScore(self):
         return self._levelScore[self.curLevel-1]
 
@@ -245,13 +279,17 @@ def moles():
             if level.didWin():
                 print('WON!')
                 break
-
-            if not i%5:
-                level.molesDig()
-            if not i%5:
-                level.moleCreate()
-
+            
+            # if not i%(level.digTime/0.2):
+            #     level.molesDig()
+            # if not i%(level.spawnTime/0.2):
+            #     level.moleCreate()
             level.draw()
-            sleep(0.2)
+            level.didPlayerBlock()
+            
+            if level.didLoose():
+                break
+            else:
+                sleep(0.2)
 
 moles()
