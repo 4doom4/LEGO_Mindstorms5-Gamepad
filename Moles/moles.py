@@ -96,7 +96,8 @@ class Player():
             self._pos = pos
 
     def coord(self):
-        return list(divmod(self._pos[0][0], 10))
+            # rot to return x,y
+        return self._rot(list(divmod(self._pos[0][0], 10)))
 
 class Level():
     emptyImage = '0' * 25
@@ -132,26 +133,14 @@ class Level():
         self.player.moveRight(self.moleBlockCoord())
 
     def didPlayerBlock(self):
-        playerCoord = self.player.coord()
-        print("{}: {}".format(playerCoord, hub.display.pixel(playerCoord[1], playerCoord[0])))
-        # playerEnv = [
-        #     hub.display.pixel([
-        #         playerCoord[0],
-        #         playerCoord[1] + 1 if playerCoord[1] + 1 < 5 else 0
-        #     ]),
-        #     hub.display.pixel([
-        #         playerCoord[0] + 1 if playerCoord[0] + 1 < 5 else 0,
-        #         playerCoord[1] + 1 if playerCoord[1] + 1 < 5 else 0
-        #     ]),
-        #     hub.display.pixel([
-        #         playerCoord[0],
-        #         playerCoord[1] - 1 if playerCoord[1] - 1 > 0 else 4
-        #     ]),
-        #     hub.display.pixel([
-        #         playerCoord[0] - 1 if playerCoord[0] - 1 < 0 else 4,
-        #         playerCoord[1] - 1 if playerCoord[1] - 1 < 0 else 4
-        #     ])
-        # ]
+        [x, y] = self.player.coord()
+        # print("{}: {}".format(playerCoord, hub.display.pixel(playerCoord[1], playerCoord[0])))
+        playerEnv = [
+            hub.display.pixel(x, y + 1 if y + 1 < 5 else 0),
+            hub.display.pixel(x + 1 if x+1 < 5 else 0, y + 1 if y+1 < 5 else 0),
+            hub.display.pixel(x, y - 1 if y - 1 < 0 else 4),
+            hub.display.pixel(x - 1 if y-1 < 0 else 4, y - 1 if y-1 < 0 else 4)
+        ]
 
         # if all(intensity == 9 for intensity in playerEnv):
         #     self._score = -1
@@ -177,8 +166,8 @@ class Level():
 
     def draw(self):
             # draw player
-        [rowP, colP] = self.player.coord()
-        index = rowP * 5 + colP
+        [xP, yP] = self.player.coord()
+        index = yP * 5 + xP
         image = self.emptyImage[:index] + '9' + self.emptyImage[index+1:]
 
             # draw mole but verify if player stands on mole which is not fully
@@ -186,15 +175,15 @@ class Level():
             # point is give to the player
         moles = []
         for mole in self.moles:
-            [rowM, colM] = mole.coord()
-            if [rowP, colP] == [rowM, colM]:
+            [xM, yM] = mole.coord()
+            if [xP, yP] == [xM, yM]:
                 self._score += 1
                 hub.led(238, 246, 246)
                 hub.sound.beep(260, 200)
                 hub.led(255, 70, 35)
             else:
                 moles.append(mole)
-                index = rowM * 5 + colM
+                index = yM * 5 + xM
                 image = image[:index] + mole.intensity() + image[index+1:]
         self.moles = moles
         hub.display.show(hub.Image(convert_image(image)))
