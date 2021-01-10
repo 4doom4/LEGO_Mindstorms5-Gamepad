@@ -8,9 +8,9 @@ is sourrounded by moles jumping out of their molehill Frank is trapped and
 looses!
 
 Playing:
-Use the left/right and center button to move up. To move down press left and
-right at the same time. When a molehill is bright like Frank he can't stomp
-on it any more.
+To play use the left/right button as well as the center button to move up. 
+To move down press left and right at the same time. When a molehill is 
+bright like Frank he can't stomp on it any more.
 
 First level requires 3, second 5 and third level 8 molehills.
 

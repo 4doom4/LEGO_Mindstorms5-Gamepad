@@ -27,3 +27,13 @@ hub.
 
 To play hold down the left key on the GamePad. Once released the final pick is
 made.
+
+### Moles
+Frank likes his garden but moles do too. They dig molehills so Frank has to
+stomp on them to retain control of his property. But be cautious! When Frank
+is sourrounded by moles jumping out of their molehill Frank is trapped and
+looses!
+
+To play use the left/right button as well as the center button to move up. 
+To move down press left and right at the same time. When a molehill is 
+bright like Frank he can't stomp on it any more.
